@@ -3,16 +3,21 @@ import numpy as np
 import random
 import sys
 
-#Initialization
-img = Image.open("image.png")
-na = np.array(img)
-pixel_number = len(na)*len(na[0])
-pixel_list = []
-for i in range(0, pixel_number):
-    pixel_list.append(i)
-key_list = []
+def main():
+    #inputs still need validation and sanitization
+    usr_input = input("file to load: ")
+    img = Image.open(usr_input)
+    na = np.array(img)
+    pixel_number = len(na)*len(na[0])
+    pixel_list = []
+    for i in range(0, pixel_number):
+        pixel_list.append(i)
+    key_list = []
+    usr_input2 = input("output filename: ")
+    write_encrypt(encrypt(na, pixel_number, pixel_list, key_list), usr_input2)
     
-def encrypt():
+    
+def encrypt(na, pixel_number, pixel_list, key_list):
     yee=0
     print("Image is", pixel_number, "Pixels") 
     print("Encrypting.", end="")
@@ -33,21 +38,21 @@ def encrypt():
                 na[rc_pos1][rc_pos2] = var
                 key_list.append(rc)
                 
-        #a way to see it's not stuck
+        #a way to see if it's not stuck
         if yee > len(na)/9: 
             yee = 0
             print(".", end="")
             sys.stdout.flush()
         yee = yee + 1
+    return na
+        
+def write_encrypt(image_array, output_name):
+    new_img = Image.fromarray(image_array)
+    new_img.save(output_name, quality=100)
             
 def decrypt():
     print(key_list)
     
     
-    
-usr_input = input("e for encrypt, d for decrypt ")
-if usr_input == "e" or "E":
-    encrypt()
-    
-new_img = Image.fromarray(na)
-new_img.save("hello.png", quality=100)
+if __name__ == "__main__":
+        main()
